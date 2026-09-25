@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://feast-and-flavours.vercel.app/sitemap.xml
