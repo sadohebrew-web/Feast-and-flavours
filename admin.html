@@ -222,6 +222,8 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .form-field label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--color-ink-soft)}
 .form-field input[type=text],
 .form-field input[type=number],
+.form-field input[type=email],
+.form-field input[type=password],
 .form-field select,
 .form-field textarea{
   padding:11px 13px;border:1px solid rgba(28,29,31,0.18);border-radius:8px;
@@ -255,6 +257,10 @@ input,select,textarea{font-family:inherit;font-size:14px}
 
 .form-actions{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
 
+.auth-gate{display:none;max-width:420px;margin:48px auto 0}
+body:not(.is-authed) .auth-gate{display:block}
+body:not(.is-authed) .admin-tabs,body:not(.is-authed) .admin-view,body:not(.is-authed) #btn-signout{display:none!important}
+.auth-error{color:var(--color-dye-deep);font-size:13px;min-height:18px;margin-bottom:10px}
 .toast{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
   background-color:var(--color-ink);color:var(--color-stone);
@@ -290,9 +296,24 @@ input,select,textarea{font-family:inherit;font-size:14px}
       <button class="admin-tab" data-tab="menu">Manage Menu</button>
       <button class="admin-tab" data-tab="addItem">Add New Item</button>
     </div>
+    <button type="button" class="btn btn-outline btn-sm" id="btn-signout" style="background:transparent;color:var(--color-stone);border-color:rgba(246,239,226,.35)">Sign out</button>
   </div>
 
   <div class="admin-main">
+
+    <!-- ADMIN SIGN IN -->
+    <section id="auth-gate" class="auth-gate">
+      <div class="form-card" style="max-width:none">
+        <h2 style="font-size:20px;margin-bottom:6px">Admin sign in</h2>
+        <p class="form-hint" style="margin-bottom:18px">Sign in with your admin account to manage the menu.</p>
+        <form id="login-form" novalidate>
+          <div class="form-field"><label for="login-email">Email</label><input type="email" id="login-email" autocomplete="username" required></div>
+          <div class="form-field"><label for="login-password">Password</label><input type="password" id="login-password" autocomplete="current-password" required></div>
+          <div class="auth-error" id="login-error" role="alert"></div>
+          <button type="submit" class="btn btn-primary btn-block" id="btn-login">Sign In</button>
+        </form>
+      </div>
+    </section>
 
     <!-- DASHBOARD VIEW -->
     <section id="view-dashboard" class="admin-view active">
@@ -437,7 +458,7 @@ window.FF_WEBSITE_MENU_ITEMS = [{"name": "Rice & Swallow Combo 4", "description"
 
 var sb = window.FF_SUPABASE_CLIENT;
 var TABLE = "products";
-var state = { items: [], editingId: null, loading: false };
+var state = { items: [], editingId: null, loading: false, authed: false };
 
 /* ---------- Helpers ---------- */
 function formatNaira(n){
@@ -827,6 +848,68 @@ async function handleGridClick(e){
   }
 }
 
+/* ---------- Admin authentication (Supabase Auth, email + password) ---------- */
+function setAuthed(session){
+  var authed = !!session;
+  document.body.classList.toggle("is-authed", authed);
+  if(authed && !state.authed){
+    state.authed = true;
+    reloadFromSupabase();
+  } else if(!authed && state.authed){
+    state.authed = false;
+    state.items = [];
+    renderAll();
+    switchTab("dashboard");
+  }
+}
+
+async function handleLogin(e){
+  e.preventDefault();
+  var email = document.getElementById("login-email").value.trim();
+  var password = document.getElementById("login-password").value;
+  var errEl = document.getElementById("login-error");
+  var btn = document.getElementById("btn-login");
+  errEl.textContent = "";
+  if(!email || !password){
+    errEl.textContent = "Enter your email and password.";
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = "Signing in…";
+  try{
+    var res = await sb.auth.signInWithPassword({ email: email, password: password });
+    if(res.error) throw res.error;
+    document.getElementById("login-password").value = "";
+    setAuthed(res.data && res.data.session);
+  }catch(err){
+    errEl.textContent = (err && err.message) ? err.message : "Sign in failed.";
+  }
+  btn.disabled = false;
+  btn.textContent = "Sign In";
+}
+
+async function handleSignOut(){
+  try{ await sb.auth.signOut(); }catch(err){ showToast(describeError(err)); }
+  setAuthed(null);
+}
+
+async function initAuth(){
+  document.getElementById("login-form").addEventListener("submit", handleLogin);
+  document.getElementById("btn-signout").addEventListener("click", handleSignOut);
+  sb.auth.onAuthStateChange(function(evt, session){
+    setTimeout(function(){
+      if(evt === "SIGNED_OUT"){ setAuthed(null); }
+      else if(session){ setAuthed(session); }
+    }, 0);
+  });
+  try{
+    var res = await sb.auth.getSession();
+    setAuthed(res.data && res.data.session);
+  }catch(err){
+    setAuthed(null);
+  }
+}
+
 /* ---------- Init ---------- */
 function init(){
   if(!sb){
@@ -856,7 +939,7 @@ function init(){
   document.getElementById("recent-grid").addEventListener("click", handleGridClick);
   document.getElementById("btn-run-migration").addEventListener("click", runMigration);
 
-  reloadFromSupabase();
+  initAuth();
 }
 
 if(document.readyState === "loading"){
