@@ -2445,6 +2445,63 @@ header.sticky{background:#E0012E;--color-dye-deep:#FFFFFF;--color-brass:#FFFFFF}
 .dark .ffp-card,.dark .ffk-panel,.dark .ffs-panel,.dark .ffn-panel,.dark .bg-stone:not(.min-h-screen){--color-stone: #333333; --color-stone-deep: #E0012E; --color-ink: #FFFFFF; --color-ink-soft: #FFFFFF; --color-dye-deep: #E0012E; --color-brass: #E0012E; --ff-text-accent: #FFFFFF; --ff-outline: #FFFFFF; --ff-line: #FFFFFF; --ff-solid: #E0012E; --ff-hover-fill: #FFFFFF; --ff-hover-fg: #333333; --ff-hover-text: #FFFFFF; --ff-hover-deco: underline;color:var(--color-ink)}
 .dark .ffp-charges{--color-stone: #FFFFFF; --color-stone-deep: #E0012E; --color-ink: #FFFFFF; --color-ink-soft: #FFFFFF; --color-dye-deep: #333333; --color-brass: #333333; --ff-text-accent: #FFFFFF; --ff-outline: #FFFFFF; --ff-line: #FFFFFF; --ff-solid: #333333; --ff-hover-fill: #FFFFFF; --ff-hover-fg: #333333; --ff-hover-text: #FFFFFF; --ff-hover-deco: underline;background:#E0012E;color:var(--color-ink)}
 .hover\:bg-brass.hover\:text-ink:hover,.hover\:bg-cream.hover\:text-ink:hover{background-color:var(--ff-hover-fill);color:var(--ff-hover-fg)}
+/* ===== Alignment & spacing pass (layout polish only) ===== */
+
+/* 1. Package cards: line up each block across the three cards on desktop */
+@media (min-width:900px){
+  @supports (grid-template-rows: subgrid){
+    .ffp-card{display:grid;grid-row:span 9;grid-template-rows:subgrid;row-gap:0}
+    .ffp-card>*{margin-top:1.25rem}
+    .ffp-card>.ffp-head{grid-row:1;margin-top:0}
+    .ffp-card>.ffp-price-wrap{grid-row:2}
+    .ffp-card>.ffp-media{grid-row:3}
+    .ffp-card>.ffp-desc{grid-row:4}
+    .ffp-card>.ffp-incs{display:contents}
+    .ffp-card>.ffp-incs>.ffp-inc{margin-top:1.25rem}
+    .ffp-card>.ffp-incs>.ffp-inc:nth-child(1){grid-row:5}
+    .ffp-card>.ffp-incs>.ffp-inc:nth-child(2){grid-row:6}
+    .ffp-card>.ffp-incs>.ffp-inc:nth-child(3){grid-row:7}
+    .ffp-card>.ffp-charges{grid-row:8;margin-top:1.5rem}
+    .ffp-card>.ffp-actions{grid-row:9}
+  }
+}
+/* consistent text indent inside package cards */
+.ffp-list li{padding-left:1rem}
+.ffp-opt{padding-left:1rem;padding-right:1rem}
+.ffp-inc-title{line-height:1.2}
+.ffp-price-wrap{padding-top:1rem;padding-bottom:1rem}
+.ffp-name{margin:0}
+
+/* 2. Section intros: same gap between a centred heading block and its content */
+.ffp-intro{margin-bottom:3rem}
+@media (min-width:768px){.ffp-intro{margin-bottom:4rem}}
+section.bg-stone-deep>div>h2.text-center{margin-bottom:3rem}
+@media (min-width:768px){section.bg-stone-deep>div>h2.text-center{margin-bottom:4rem}}
+
+/* 3. Consultation: copy and form start on the same line; note aligns with copy */
+.ffc-wrap{align-items:start}
+.ffc-copy>*:first-child{margin-top:0}
+.ffc-form{margin:0}
+.ffc-note{margin-left:0}
+
+/* 4. Why Choose image sits on the same left edge as the text on small screens */
+@media (max-width:1023px){
+  #marble-edit .aspect-\[4\/5\]{margin-left:0;margin-right:auto}
+}
+
+/* 5. Gallery heading row and footer columns share a baseline */
+#gallery .flex.items-end{align-items:baseline}
+footer .grid[class*="lg:grid-cols-6"]{align-items:baseline}
+footer .grid[class*="lg:grid-cols-6"]>div>p:first-child,
+footer .grid[class*="lg:grid-cols-6"]>div>h3:first-child,
+footer .grid[class*="lg:grid-cols-6"]>div>h4:first-child{margin-top:0}
+
+/* 6. Buttons: centred labels, no cramped wrapping on narrow screens */
+.ffp-btn,.ffc-submit{text-align:center;line-height:1.2}
+@media (max-width:480px){
+  .ffp-btn,.ffc-submit{padding-left:.75rem;padding-right:.75rem}
+}
+.ffp-actions .ffp-btn{min-height:3rem}
 </style>
 <meta name="theme-color" content="#E0012E">
 <link rel=icon type=image/svg+xml
