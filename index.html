@@ -2634,6 +2634,48 @@ footer input[class]::placeholder{color:rgba(255,255,255,.7)}
 /* buttons: crimson primary, gold hover; subtle lift */
 .bg-dye-deep{background-color:#E63946}
 .bg-dye-deep:hover,.hover\:bg-brass:hover{box-shadow:0 8px 20px -10px rgba(212,175,119,.55)}
+
+/* ===== Package cards: rounded corners + button hierarchy (Add to Cart = primary, Book a Consultation = secondary) ===== */
+.ffp-card{border-radius:20px;overflow:hidden}
+.ffp-media{border-radius:12px;overflow:hidden}
+.ffp-media img{border-radius:inherit}
+.ffp-charges,.ffp-opt{border-radius:12px}
+.ffp-actions{gap:.75rem}
+.ffp-actions .ffp-btn.ffp-btn{width:100%;min-height:3.25rem;height:3.25rem;padding:0 1.25rem;border-radius:16px;font-weight:600;
+  transition:background-color .2s ease,border-color .2s ease,color .2s ease,box-shadow .2s ease,transform .15s ease}
+.ffp-actions .ffp-btn.ffp-btn:hover{transform:none}
+/* primary: Add to Cart */
+.ffp-actions .ffp-btn.ffp-btn:first-child{background:#D7263D;color:#FFFFFF;border:1px solid #D7263D;box-shadow:0 10px 20px -12px rgba(215,38,61,.8)}
+.ffp-actions .ffp-btn.ffp-btn:first-child:hover{background:#B81F33;border-color:#B81F33;color:#FFFFFF;box-shadow:0 12px 22px -12px rgba(184,31,51,.85)}
+.ffp-actions .ffp-btn.ffp-btn:first-child:active{background:#9E1A2C;border-color:#9E1A2C;transform:translateY(1px)}
+/* secondary: Book a Consultation */
+.ffp-actions .ffp-btn.ffp-btn:last-child{background:transparent;color:var(--color-ink);border:1px solid rgba(255,255,255,.4);border-color:color-mix(in srgb,currentColor 42%,transparent);box-shadow:none}
+.ffp-actions .ffp-btn.ffp-btn:last-child:hover{background:rgba(255,255,255,.08);background:color-mix(in srgb,currentColor 9%,transparent);color:var(--color-ink);border-color:currentColor;box-shadow:none}
+.ffp-actions .ffp-btn.ffp-btn:last-child:active{background:color-mix(in srgb,currentColor 15%,transparent);transform:translateY(1px)}
+
+/* ===== Opening animation: deep crimson + burgundy + midnight black + white light (colours and lighting only) ===== */
+#ffIntro{overflow:hidden;
+  background:
+    radial-gradient(ellipse 62% 48% at 50% 43%,rgba(169,29,53,.92) 0%,rgba(169,29,53,.55) 30%,rgba(101,28,45,.55) 52%,rgba(101,28,45,0) 78%),
+    radial-gradient(ellipse 120% 90% at 50% 120%,rgba(101,28,45,.85) 0%,rgba(101,28,45,0) 62%),
+    linear-gradient(180deg,#101010 0%,#1C0A10 38%,#2A0D16 62%,#101010 100%)}
+/* soft white key light above the plate + black vignette for depth */
+#ffIntro::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 44% 34% at 50% 36%,rgba(255,255,255,.16) 0%,rgba(255,255,255,.05) 38%,rgba(255,255,255,0) 70%);
+  animation:ffIntroLight 1.8s ease-out both}
+#ffIntro::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 85% 75% at 50% 48%,rgba(16,16,16,0) 45%,rgba(16,16,16,.78) 100%)}
+.ff-intro-inner{position:relative;z-index:1}
+@keyframes ffIntroLight{0%{opacity:0;transform:scale(.92)}45%{opacity:1}100%{opacity:.85;transform:scale(1.06)}}
+
+/* plate: smoked-glass disc with a crimson heart, white rim light, soft shadow */
+.ff-intro-plate{filter:drop-shadow(0 0 16px rgba(255,255,255,.14)) drop-shadow(0 16px 22px rgba(0,0,0,.6))}
+.ff-intro-plate circle:nth-of-type(1){fill:rgba(16,16,16,.55);stroke:#FFFFFF;stroke-opacity:.92}
+.ff-intro-plate circle:nth-of-type(2){fill:rgba(169,29,53,.22);stroke:#FFFFFF;stroke-opacity:.5}
+.ff-intro-plate path:not(.ff-steam-line){stroke:#FFFFFF;stroke-opacity:.95}
+.ff-intro-plate line{stroke:#FFFFFF;stroke-opacity:.85}
+.ff-steam-line{stroke:#FFFFFF;filter:drop-shadow(0 0 4px rgba(255,255,255,.55))}
+.ff-intro-brand{color:#FFFFFF;text-shadow:0 2px 20px rgba(0,0,0,.6),0 0 24px rgba(169,29,53,.45)}
 </style>
 <meta name="theme-color" content="#E0012E">
 <link rel=icon type=image/svg+xml
