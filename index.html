@@ -2550,13 +2550,51 @@ footer .grid[class*="lg:grid-cols-6"]>div>h4:first-child{margin-top:0}
 .ffh-vig{position:absolute;inset:0;
   background:radial-gradient(ellipse 70% 80% at 72% 50%,rgba(16,16,16,0) 60%,rgba(16,16,16,.35) 100%),
   linear-gradient(90deg,rgba(16,16,16,.55) 0%,rgba(16,16,16,0) 50%)}
+
+/* ===== Launch badge: 3D seal beside the plate (rotates on its own axis, floats gently) ===== */
+.ffh-badge{position:absolute;left:-9%;top:6%;width:27%;aspect-ratio:1;perspective:640px;container-type:inline-size;
+  animation:ffhPop 1.1s cubic-bezier(.22,.61,.36,1) 3.4s both}
+@keyframes ffhPop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+.ffh-float,.ffh-coin{position:absolute;inset:0;transform-style:preserve-3d}
+.ffh-float{will-change:transform;animation:ffhBob 5.2s ease-in-out infinite alternate}
+@keyframes ffhBob{from{transform:translate3d(0,0,0) rotateX(9deg)}to{transform:translate3d(0,-9%,0) rotateX(-5deg)}}
+.ffh-coin{will-change:transform;animation:ffhSpin 10s linear infinite}
+@keyframes ffhSpin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+.ffh-shadow{position:absolute;left:12%;right:12%;bottom:-14%;height:12%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(16,16,16,.55),rgba(16,16,16,0));will-change:transform,opacity;
+  animation:ffhShadow 5.2s ease-in-out infinite alternate}
+@keyframes ffhShadow{from{transform:scale(1);opacity:.9}to{transform:scale(.8);opacity:.5}}
+.ffh-edge i{position:absolute;inset:0;border-radius:50%;transform:translateZ(var(--z));
+  background:linear-gradient(135deg,#FFFFFF,#A91D35 45%,#101010)}
+.ffh-face-wrap{position:absolute;inset:0;border-radius:50%;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.ffh-front{transform:translateZ(5.5px)}
+.ffh-back{transform:rotateY(180deg) translateZ(5.5px)}
+.ffh-face{position:absolute;inset:0;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:radial-gradient(circle at 32% 26%,#D23A55 0%,#A91D35 42%,#101010 118%);
+  box-shadow:inset 0 0 0 3.5cqw #FFFFFF,inset 0 0 0 4.6cqw #101010,0 0 0 1px rgba(255,255,255,.35)}
+.ffh-face::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:linear-gradient(115deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.38) 48%,rgba(255,255,255,0) 64%)}
+.ffh-ring{position:absolute;inset:11%;border-radius:50%;border:1.2px dashed rgba(255,255,255,.7)}
+.ffh-txt{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.08;color:#FFFFFF;
+  font-family:"Playfair Display",Georgia,"Times New Roman",serif;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+  font-size:11.5cqw;text-shadow:0 1px 3px rgba(16,16,16,.6)}
+.ffh-txt b{display:block;font-weight:800}
+.ffh-txt b:nth-child(2){font-size:1.12em;color:#FFFFFF}
+/* narrow desktops: text column is wide, so the badge sits at the plate's top-right instead of the top-left */
+@media (min-width:900px) and (max-width:1199px){.ffh-badge{left:auto;right:-6%}}
 .ffd-deco.ffh-paused *{animation-play-state:paused !important}
+/* ===== Layout fixes: long naira prices wrap instead of spilling out of cards on narrow phones ===== */
+.ffp-price{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.6rem;row-gap:0;max-width:100%;font-size:clamp(1.8rem,8.4vw,2.4rem)}
+.ffp-price .ffp-was{margin-right:0}
+.ffp-card,.ffd-summary{min-width:0}
+
 
 /* Mobile / small tablet: the photo gets its own block on top, hero text sits below it */
 @media (max-width:899px){
   #top{height:auto;min-height:0;max-height:none;display:flex;flex-direction:column}
   #top .ffd-deco{position:relative;inset:auto;flex:none;width:min(100%,420px);margin:.5rem auto 0;aspect-ratio:1/1.02;--ffd-o:1}
   #top .ffd-stage{left:50%;right:auto;top:50%;width:100%;transform:translate(-50%,-54%)}
+  #top .ffh-badge{left:2.6%;top:19%;width:22%}
   #top .ffd-glow{inset:-18%;width:auto;aspect-ratio:auto;margin:0;right:auto;top:auto}
   #top .ffh-vig{display:none}
   #top .ff-hero-content{height:auto;justify-content:flex-start;padding-top:1.25rem;padding-bottom:3rem;flex:none}
@@ -3014,11 +3052,11 @@ ul.ffd-facts{border-radius:12px;overflow:hidden}
     .map(function (w) { return '<i style="left:' + w[0] + '%;bottom:calc(100% - ' + w[1] + '%);--dx:' + w[2] + '%;--o:' + w[5] + ';animation-duration:' + w[3] + 's;animation-delay:' + w[4] + 's"></i>'; }).join("");
   var dust = [[18,30,-14,11,-2,4],[40,24,10,13,-6,3],[58,34,-8,12,-9,5],[74,44,12,10,-4,3],[34,58,8,14,-11,4],[82,62,-10,12,-7,3]]
     .map(function (m) { return '<b style="left:' + m[0] + '%;top:' + m[1] + '%;--dx:' + m[2] + 'px;width:' + m[5] + 'px;height:' + m[5] + 'px;animation-duration:' + m[3] + 's;animation-delay:' + m[4] + 's"></b>'; }).join("");
-  return '<div class="ffd-glow"></div>' +
+  return '<div class="ffd-glow"></div><div class="ffh-vig"></div>' +
     '<div class="ffd-stage"><div class="ffh-halo"></div><div class="ffh-cam"><div class="ffh-drift">' +
     '<div class="ffh-disc"></div><div class="ffh-plate"><img class="ffh-photo" src="' + src + '" width="799" height="1066" alt="" decoding="async" fetchpriority="high"><div class="ffh-sweep"></div></div>' +
     '<div class="ffh-steam">' + steam + '</div><div class="ffh-dust">' + dust + '</div>' +
-    '</div></div></div><div class="ffh-vig"></div>';
+    '</div></div><div class="ffh-badge"><div class="ffh-shadow"></div><div class="ffh-float"><div class="ffh-coin"><div class="ffh-edge"><i style="--z:-5px"></i><i style="--z:-3px"></i><i style="--z:-2px"></i><i style="--z:0px"></i><i style="--z:1px"></i><i style="--z:2px"></i><i style="--z:4px"></i></div><div class="ffh-face-wrap ffh-front"><div class="ffh-face"><span class="ffh-ring"></span><span class="ffh-txt"><b>WEBSITE</b> <b>LAUNCH</b> <b>SALES</b></span></div></div><div class="ffh-face-wrap ffh-back"><div class="ffh-face"><span class="ffh-ring"></span><span class="ffh-txt"><b>WEBSITE</b> <b>LAUNCH</b> <b>SALES</b></span></div></div></div></div></div></div>';
 }
 /* ===== Event packages + consultation (added in the catering redesign) ===== */
 const FFH = (t, p, ...c) => V.createElement(t, p, ...c);
