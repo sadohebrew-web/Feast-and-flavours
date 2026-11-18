@@ -2927,6 +2927,16 @@ img.ffm-photo{filter:none !important}
 .ffp-media{padding:0 !important;aspect-ratio:auto !important;border:0 !important;background:#0B0B0D !important}
 .ffp-media img{height:auto !important;object-fit:contain !important;filter:none !important}
 #marble-edit .aspect-\[4\/5\]{aspect-ratio:1199/1312 !important}
+
+/* ===== Hero photo: feathered into the background (no box, border or hard edge) ===== */
+#top .ffh-photo,html:not(.dark) #top .ffh-photo{border-radius:0 !important;box-shadow:none !important;border:0;outline:0;background:transparent;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 10%,#000 74%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 13%,#000 72%,transparent 100%),radial-gradient(ellipse 78% 76% at 50% 48%,#000 70%,transparent 100%);
+  mask-image:linear-gradient(to right,transparent 0,#000 10%,#000 74%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 13%,#000 72%,transparent 100%),radial-gradient(ellipse 78% 76% at 50% 48%,#000 70%,transparent 100%);
+  -webkit-mask-composite:source-in,source-in;mask-composite:intersect,intersect;
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.ffh-fig::before{inset:10% -16%;background:radial-gradient(closest-side,rgba(230,57,70,.26),rgba(230,57,70,0) 74%)}
+html:not(.dark) .ffh-fig::before{background:radial-gradient(closest-side,rgba(17,17,17,.07),rgba(17,17,17,0) 72%)}
+html.dark #top .ffh-photo{-webkit-mask-image:linear-gradient(to right,transparent 0,#000 11%,#000 70%,transparent 99%),linear-gradient(to bottom,transparent 0,#000 15%,#000 70%,transparent 100%),radial-gradient(ellipse 76% 74% at 48% 48%,#000 68%,transparent 100%);mask-image:linear-gradient(to right,transparent 0,#000 11%,#000 70%,transparent 99%),linear-gradient(to bottom,transparent 0,#000 15%,#000 70%,transparent 100%),radial-gradient(ellipse 76% 74% at 48% 48%,#000 68%,transparent 100%)}
 </style>
 <meta name="theme-color" content="#E0012E">
 <link rel=icon type=image/svg+xml
